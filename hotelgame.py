@@ -1,4 +1,14 @@
+"""
+Starting Template
+
+Once you have learned how to use classes, you can begin your program with this
+template.
+
+If Python and Arcade are installed, this example can be run from the command line with:
+python -m arcade.examples.starting_template
+"""
 import arcade
+import os
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -16,14 +26,21 @@ class MyGame(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        # Set the working directory (where we expect to find files) to the same
+        # directory this .py file is in. You can leave this out of your own
+        # code, but it is needed to easily run the examples using "python -m"
+        # as mentioned at the top of this program.
+        file_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(file_path)
+
+        self.background = None
 
         # If you have sprite lists, you should create them here,
         # and set them to None
 
     def setup(self):
         # Create your sprites and sprite lists here
-        pass
+        self.background = arcade.load_texture("hotellobby.png")
 
     def on_draw(self):
         """
@@ -33,7 +50,7 @@ class MyGame(arcade.Window):
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
-
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         # Call draw() on all your sprite lists below
 
     def update(self, delta_time):
