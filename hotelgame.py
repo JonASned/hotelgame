@@ -1,29 +1,32 @@
 """
-Starting Template
+Sprite Collect Coins
 
-Once you have learned how to use classes, you can begin your program with this
-template.
+Simple program to show basic sprite usage.
+
+Artwork from http://kenney.nl
 
 If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.starting_template
+python -m arcade.examples.sprite_collect_coins_background
 """
+import random
 import arcade
 import os
 
-SCREEN_WIDTH = 800
+SPRITE_SCALING = 0.5
+
+SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 
 
 class MyGame(arcade.Window):
     """
     Main application class.
-
-    NOTE: Go ahead and delete the methods you don't need.
-    If you do need a method, delete the 'pass' and replace it
-    with your own code. Don't leave 'pass' in this program.
     """
 
     def __init__(self, width, height):
+        """ Initializer """
+
+        # Call the parent class initializer
         super().__init__(width, height)
 
         # Set the working directory (where we expect to find files) to the same
@@ -33,72 +36,117 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
+        # Background image will be stored in this variable
         self.background = None
 
-        # If you have sprite lists, you should create them here,
-        # and set them to None
+        # Variables that will hold sprite lists
+        self.player_list = None
+        self.coin_list = None
+
+        # Set up the player info
+        self.player_sprite = None
+        self.score = 0
+        self.score_text = None
+
+        # Don't show the mouse cursor
+        self.set_mouse_visible(False)
+
+        # Set the background color
+        arcade.set_background_color(arcade.color.AMAZON)
 
     def setup(self):
-        # Create your sprites and sprite lists here
+        """ Set up the game and initialize the variables. """
+
+        # Load the background image. Do this in the setup so we don't keep reloading it all the time.
+        # Image from:
+        # http://wallpaper-gallery.net/single/free-background-images/free-background-images-22.html
         self.background = arcade.load_texture("hotellobby.png")
+
+        # Sprite lists
+        self.player_list = arcade.SpriteList()
+        self.coin_list = arcade.SpriteList()
+
+        # Set up the player
+        '''
+        self.score = 0
+        self.player_sprite = arcade.Sprite("images/character.png", SPRITE_SCALING)
+        self.player_sprite.center_x = 50
+        self.player_sprite.center_y = 50
+        self.player_list.append(self.player_sprite)
+        '''
+
+        '''
+        for i in range(50):
+
+            # Create the coin instance
+            coin = arcade.Sprite("images/coin_01.png", SPRITE_SCALING / 3)
+
+            # Position the coin
+            coin.center_x = random.randrange(SCREEN_WIDTH)
+            coin.center_y = random.randrange(SCREEN_HEIGHT)
+
+            # Add the coin to the lists
+            self.coin_list.append(coin)
+        '''
 
     def on_draw(self):
         """
         Render the screen.
         """
 
-        # This command should happen before we start drawing. It will clear
-        # the screen to the background color, and erase what we drew last frame.
+        # This command has to happen before we start drawing
         arcade.start_render()
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-        # Call draw() on all your sprite lists below
 
-    def update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
-        pass
+        # Draw the background texture
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
 
-    def on_key_press(self, key, key_modifiers):
-        """
-        Called whenever a key on the keyboard is pressed.
+        # Draw all the sprites.
+        '''
+        self.coin_list.draw()
+        self.player_list.draw()
+        '''
 
-        For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
-        """
-        pass
+        # Render the text
+        '''
+        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+        '''
 
-    def on_key_release(self, key, key_modifiers):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
-        pass
-
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
+    def on_mouse_motion(self, x, y, dx, dy):
         """
         Called whenever the mouse moves.
         """
-        pass
+        '''
+        self.player_sprite.center_x = x
+        self.player_sprite.center_y = y
+        '''
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        """
-        Called when the user presses a mouse button.
-        """
-        pass
+    def update(self, delta_time):
+        """ Movement and game logic """
 
-    def on_mouse_release(self, x, y, button, key_modifiers):
-        """
-        Called when a user releases a mouse button.
-        """
-        pass
+        # Call update on the coin sprites (The sprites don't do much in this
+        # example though.)
+        '''
+        self.coin_list.update()
+        '''
+
+        # Generate a list of all sprites that collided with the player.
+        '''
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        '''
+
+        # Loop through each colliding sprite, remove it, and add to the score.
+        '''
+        for coin in hit_list:
+            coin.kill()
+            self.score += 1
+        '''
 
 
 def main():
     """ Main method """
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
-    game.setup()
+    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
+    window.setup()
     arcade.run()
 
 
