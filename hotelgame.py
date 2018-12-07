@@ -27,7 +27,7 @@ class MyGame(arcade.Window):
         """ Initializer """
 
         # Call the parent class initializer
-        super().__init__(width, height)
+        super().__init__(width, height, fullscreen=True)
 
         # Set the working directory (where we expect to find files) to the same
         # directory this .py file is in. You can leave this out of your own
@@ -142,6 +142,13 @@ class MyGame(arcade.Window):
             self.score += 1
         '''
 
+    def on_key_press(self, key, key_modifiers):
+        if key == arcade.key.ESCAPE:
+            self.is_full_screen = False
+            self.set_fullscreen(self.is_full_screen)
+            width, height = self.get_size()
+            self.set_viewport(0, width, 0, height)
+
 
 def main():
     """ Main method """
@@ -152,3 +159,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
